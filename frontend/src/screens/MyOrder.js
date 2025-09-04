@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import Footer from '../components/Footer';
 import Navbar from '../components/Navbar';
+require("dotenv").config();
+
+const API_BASE = process.env.REACT_APP_API_URL;
 
 export default function MyOrder() {
 
@@ -8,7 +11,7 @@ export default function MyOrder() {
 
   const fetchMyOrder = async () => {
     console.log(localStorage.getItem('userEmail'))
-    await fetch("http://localhost:5000/api/myOrderData", {
+    await fetch(`${API_BASE}/api/myOrderData`, {
      
       method: 'POST',
       headers: {

@@ -2,6 +2,9 @@ import React, { useEffect, useState } from 'react'
 import Card from '../components/Card'
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
+require("dotenv").config();
+
+const API_BASE = process.env.REACT_APP_API_URL;
 
 export default function Home() {
   const [foodItems, setfoodItems] = useState([]);
@@ -9,7 +12,7 @@ export default function Home() {
   const [search, setSearch] = useState("");
   const loadData = async () => {
     try {
-      const response = await fetch("http://localhost:5000/api/DisplayData", {
+      const response = await fetch(`${API_BASE}/api/DisplayData`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
