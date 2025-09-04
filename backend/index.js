@@ -1,36 +1,37 @@
-
 const express = require('express');
 const connectToMongo = require('./db');
-const { head } = require('./Routes/CreateUser');
+const cors = require('cors');  // ✅ Add cors package
 const app = express();
-const PORT = 5000;
- // CommonJS style
 
 // Connect to MongoDB
 connectToMongo();
 
 // Middleware
-app.use((req, res, next) => {
-  res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000'); // Allow requests from the React app
-  res.setHeader(
-    "Access-Control-Allow-Headers",
-    "Origin, X-Requested-With, Content-Type, Accept"
-  );
-  next();
-});
-
-
 app.use(express.json());
 
+// ✅ Allow frontend domain(s) via CORS
+const allowedOrigins = [
+  'http://localhost:3000', // for local dev
+  'https://dreamfood.vercel.app', // your deployed frontend (Vercel)
+  'https://your-netlify-domain.netlify.app' // if using Netlify
+];
+
+app.use(cors({
+  origin: allowedOrigins,
+  credentials: true
+}));
+
+// Routes
 app.use('/api', require('./Routes/CreateUser'));
 app.use('/api', require('./Routes/DisplayData'));
 app.use('/api', require('./Routes/OrderData'));
-// Routes
+
 app.get('/', (req, res) => {
-  res.send("🚀 Express server running without callback-style MongoDB connection!");
+  res.send("🚀 Express server running successfully!");
 });
 
-// Start server
+// ✅ Use Render's dynamic PORT
+const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`🚀 Server is running at http://localhost:${PORT}`);
 });
